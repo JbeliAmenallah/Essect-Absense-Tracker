@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "776661548201",
+    "firebase_url": "https://essectapp-4c894-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "essectapp-4c894",
+    "storage_bucket": "essectapp-4c894.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:776661548201:android:50869ed2a7c1f1711b7db8",
+        "android_client_info": {
+          "package_name": "com.example.essect3"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeYC6uUlwjIxDsj3tgXJ1hXwG6N7FE6zs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
