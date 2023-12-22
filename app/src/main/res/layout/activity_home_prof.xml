@@ -186,16 +186,35 @@
         tools:layout_editor_absoluteX="0dp">
 
         <LinearLayout
-            android:id="@+id/add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/activity_dashboard_add" />
-            <include layout="@layout/activity_dashboard_add" />
+            <!-- LinearLayout for activity_dashboard_add -->
+            <LinearLayout
+                android:id="@+id/layoutDashboardAdd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+                <include layout="@layout/activity_dashboard_add" />
 
+                <!-- Add other views or widgets related to activity_dashboard_add here -->
 
+            </LinearLayout>
+
+            <!-- LinearLayout for activity_absence -->
+            <LinearLayout
+                android:id="@+id/layoutAbsence"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/activity_absence" />
+
+                <!-- Add other views or widgets related to activity_absence here -->
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btnLogout"
@@ -208,8 +227,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/_16ssp" />
 
-
         </LinearLayout>
-
     </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

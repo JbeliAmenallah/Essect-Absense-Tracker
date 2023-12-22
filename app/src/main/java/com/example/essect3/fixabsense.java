@@ -12,6 +12,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class fixabsense extends AppCompatActivity {
 
@@ -42,14 +45,17 @@ public class fixabsense extends AppCompatActivity {
                 String subject = editTextSubject.getText().toString();
                 String presentOrAbsent = editTextnbabs.getText().toString();
 
+                // Get current date
+                String currentDate = getCurrentDate();
+
                 // Check if CSV file exists
                 if (!isFileExist()) {
                     // Create CSV file
                     createCsvFile();
                 }
 
-                // Insert data into CSV file
-                insertDataIntoCsv(studentName, subject, presentOrAbsent);
+                // Insert data into CSV file with current date
+                insertDataIntoCsv(studentName, subject, presentOrAbsent, currentDate);
 
                 // Optionally, show a toast message to indicate success
                 Toast.makeText(fixabsense.this, "Data inserted into CSV file", Toast.LENGTH_SHORT).show();
@@ -67,8 +73,8 @@ public class fixabsense extends AppCompatActivity {
             File file = new File(getExternalFilesDir(null), "absense.csv");
             FileWriter writer = new FileWriter(file);
 
-            // Write header if needed
-            // writer.append("StudentName,Subject,PresentOrAbsent\n");
+            // Write header
+            writer.append("NameStudent,SubjectName,State,Date\n");
 
             // Close the writer
             writer.close();
@@ -77,18 +83,24 @@ public class fixabsense extends AppCompatActivity {
         }
     }
 
-    private void insertDataIntoCsv(String studentName, String subject, String presentOrAbsent) {
+
+    private void insertDataIntoCsv(String studentName, String subject, String presentOrAbsent, String currentDate) {
         try {
             File file = new File(getExternalFilesDir(null), "absense.csv");
             FileWriter writer = new FileWriter(file, true);
 
             // Append data to the CSV file
-            writer.append(studentName).append(",").append(subject).append(",").append(presentOrAbsent).append("\n");
+            writer.append(studentName).append(",").append(subject).append(",").append(presentOrAbsent).append(",").append(currentDate).append("\n");
 
             // Close the writer
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String getCurrentDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return sdf.format(new Date());
     }
 }

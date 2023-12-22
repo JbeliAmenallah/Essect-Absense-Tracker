@@ -3,6 +3,7 @@ package com.example.essect3;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,12 +25,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StreamDownloadTask;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class addetu extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -112,7 +113,7 @@ public class addetu extends AppCompatActivity {
     private void showAddStudentPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add Student");
-        builder.setMessage("Student added with default password: 12345678\nPlease tell him to change the password ASAP!");
+        builder.setMessage("Student added with default password: 12345678 Please tell him to change the password ASAP!");
 
         // Add a button to dismiss the dialog
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -135,63 +136,60 @@ public class addetu extends AppCompatActivity {
     private void writeStudentDetailsToCSV(Etudiant etudiant) {
         // Get a reference to the CSV file in Firebase Storage
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-        StorageReference csvFileRef = storageRef.child("gs://essectapp-4c894.appspot.com/etudiantabs - Feuille 1.csv");
+        StorageReference csvFileRef = storageRef.child("gs://essectapp-4c894.appspot.com/etudiant.csv");
 
-        // Read the existing CSV data (if needed), modify it, and then write it back
-        // For simplicity, this example assumes the CSV structure is straightforward.
+        // Read the existing CSV data
+        csvFileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Assuming the CSV file is small, read the content into a string
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(uri);
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder stringBuilder = new StringBuilder();
 
-        String studentDetails = etudiant.getEmail() + "," + etudiant.getNom() + "," + etudiant.getGroup() + "\n";
-
-        csvFileRef.getStream()
-                .addOnSuccessListener(new OnSuccessListener<StreamDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(StreamDownloadTask.TaskSnapshot taskSnapshot) {
-                        // Assuming the CSV file is small, read the content into a string
-                        InputStream inputStream = taskSnapshot.getStream();
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-                        try {
-                            int bytesRead;
-                            byte[] buffer = new byte[1024];
-
-                            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                                baos.write(buffer, 0, bytesRead);
-                            }
-
-                            // Append the new student details
-                            baos.write(studentDetails.getBytes());
-
-                            // Write the updated content back to the CSV file
-                            csvFileRef.putBytes(baos.toByteArray())
-                                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                        @Override
-                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                            // CSV file updated successfully
-                                            showToast("Student details added to CSV");
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            // Handle failure to update CSV file
-                                            showToast("Failed to update CSV file");
-                                        }
-                                    });
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        stringBuilder.append(line).append("\n");
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Handle failure to read CSV file
-                        showToast("Failed to read CSV file");
-                    }
-                });
+
+                    // Append the new student details
+                    stringBuilder.append(etudiant.getEmail()).append(",")
+                            .append(etudiant.getNom()).append(",")
+                            .append(etudiant.getGroup()).append("\n");
+
+                    // Write the updated content back to the CSV file
+                    byte[] data = stringBuilder.toString().getBytes();
+                    csvFileRef.putBytes(data)
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    showToast("Student details added to CSV");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    showToast("Failed to update CSV file");
+                                }
+                            });
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    showToast("Error reading CSV file");
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                showToast("Failed to read CSV file");
+            }
+        });
     }
 
     private void showToast(String message) {
-        Toast.makeText(addetu.this, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
+
 }
+

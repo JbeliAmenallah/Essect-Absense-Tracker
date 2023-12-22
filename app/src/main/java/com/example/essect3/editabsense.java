@@ -56,4 +56,5 @@ public class editabsense extends AppCompatActivity {
     private void updateCounter() {
         textCounter.setText(String.valueOf(counter));
     }
+
 }

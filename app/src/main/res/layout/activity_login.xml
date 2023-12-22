@@ -18,6 +18,7 @@
         tools:src="@tools:sample/avatars"
         tools:srcCompat="@drawable/top_background" />
 
+
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="265dp"

@@ -2,9 +2,6 @@ package com.example.essect3;
 
 import static com.example.essect3.R.id.textView11;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,7 +34,7 @@ public class loginetu extends AppCompatActivity {
         FirebaseUser currentUser=mAuth.getCurrentUser();
 
         if(currentUser != null) {
-            startActivity(new Intent(loginetu.this, Home_prof.class));
+            startActivity(new Intent(loginetu.this, HomeEtu.class));
             finish(); // Close the current activity
         }
         TextView createAccountTextView = findViewById(textView11);
@@ -64,7 +64,7 @@ public class loginetu extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        Intent intent = new Intent(loginetu.this, Home_prof.class);
+                                        Intent intent = new Intent(loginetu.this, HomeEtu.class);
                                         startActivity(intent);
                                         finish();
                                     } else {

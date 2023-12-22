@@ -20,12 +20,23 @@ public class Home_prof extends AppCompatActivity {
         firebaseAuthManager = FirebaseAuthManager.getInstance();
 
         // Set up click listener for LinearLayout to navigate to dashboard_add
-        LinearLayout addLinearLayout = findViewById(R.id.add);
+        LinearLayout addLinearLayout = findViewById(R.id.layoutDashboardAdd);
         addLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 navigateToDashboardAdd();
+
             }
+
+        });
+        LinearLayout abs = findViewById(R.id.layoutAbsence);
+        abs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigateToAbs();
+
+            }
+
         });
 
         // Set up click listener for Logout Button
@@ -40,9 +51,14 @@ public class Home_prof extends AppCompatActivity {
 
     // Method to navigate to DashboardAddActivity
     private void navigateToDashboardAdd() {
-        Intent intent = new Intent(Home_prof.this, fixabsense.class);
+        Intent intent = new Intent(Home_prof.this, dashboard_add.class);
         startActivity(intent);
     }
+    private void navigateToAbs() {
+        Intent intent = new Intent(Home_prof.this, absence.class);
+        startActivity(intent);
+    }
+
 
     // Method to handle logout
     private void logout() {

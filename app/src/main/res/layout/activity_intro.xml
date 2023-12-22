@@ -84,10 +84,12 @@
 
     <Button
         android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="182dp"
+        android:layout_height="88dp"
+        android:onClick="onButtonClick"
         android:text="Get Started"
-        android:onClick="onButtonClick" />
+        tools:layout_editor_absoluteX="226dp"
+        tools:layout_editor_absoluteY="742dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
